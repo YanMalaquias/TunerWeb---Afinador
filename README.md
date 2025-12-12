@@ -11,10 +11,15 @@ A interface apresenta um medidor semicircular com agulha suave e responsiva, atu
 ---
 
 ## 📸 Screenshot
-*(adicione a imagem do projeto aqui, por exemplo em /assets/screenshot.png)*
+*(C:\Users\kaell\Music\turner.png)*
+
+---
+
+## 🧭 Funcionalidades
+*
 
 ```md
-![TunerWeb Screenshot](./assets/screenshot.png)
+![TunerWeb Screenshot](C:\Users\kaell\Music\turner.png)
 🧭 Funcionalidades
 
 🎤 Captura áudio do microfone em tempo real
