@@ -1,0 +1,25 @@
+.header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.nav {
+  margin-top: 10px;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}

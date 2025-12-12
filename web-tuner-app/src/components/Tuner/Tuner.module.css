@@ -1,0 +1,42 @@
+.tuner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.note {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.deviation {
+  font-size: 1.5rem;
+  color: #ff5722;
+}
+
+.frequency {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
