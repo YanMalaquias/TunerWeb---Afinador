@@ -1,0 +1,9 @@
+html,body,#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: #071022;
+  color: #e6eef8;
+}
