@@ -1,198 +1,98 @@
-# 🎵 TunerWeb — Afinador Online para Instrumentos (React + TypeScript + Vite)
+# TunerWeb - Um Afinador Cromático de Alta Precisão para a Web
 
-TunerWeb é um afinador digital de alta precisão desenvolvido com **React**, **TypeScript** e **Vite**, utilizando a **Web Audio API** para detectar notas musicais em tempo real.  
-A interface apresenta um medidor semicircular com agulha suave e responsiva, atualizada continuamente conforme a afinação detectada.
+O TunerWeb é uma aplicação de afinador cromático de código aberto, desenvolvida para oferecer a músicos uma ferramenta rápida, precisa e acessível diretamente no navegador. Construído com as tecnologias mais modernas de desenvolvimento web, ele transforma seu dispositivo em um afinador sensível e confiável, ideal para guitarras, baixos, vocais e uma vasta gama de outros instrumentos.
 
----
+A aplicação utiliza a **Web Audio API** para processamento de áudio de baixa latência e implementa o robusto algoritmo **YIN** para uma detecção de frequência fundamental extremamente precisa. O resultado é uma experiência de afinação fluida, com um feedback visual intuitivo através de um medidor analógico (gauge) que responde suavemente aos seus ajustes, guiando-o para a nota perfeita sem a tremulação comum em outros afinadores digitais.
 
-## 🚀 Demonstração
-*(adicione aqui o link quando publicar a aplicação)*
+Seja você um músico iniciante aprendendo a afinar seu primeiro instrumento ou um profissional que precisa de uma verificação rápida antes de uma apresentação, o TunerWeb oferece uma solução elegante e de alto desempenho.
 
----
+![Prévia do Afinador](https://i.imgur.com/example.png) <!-- Placeholder para imagem -->
 
-## 📸 Screenshot
-*(C:\Users\kaell\Music\turner.png)*
+## 🎯 Funcionalidades
 
----
+- **Detecção de Frequência em Tempo Real**: Captura e processa o áudio do microfone.
+- **Alta Precisão**: Utiliza o algoritmo YIN com interpolação parabólica para detecção de pitch sub-harmônico.
+- **Conversão para Nota Musical**: Converte a frequência detectada em nota (A, B, C#) e oitava.
+- **Medidor de Cents**: Exibe o desvio da afinação em cents (de -50 a +50) para um ajuste fino.
+- **Feedback Visual Intuitivo**:
+    - Um medidor analógico (gauge) semicircular com um ponteiro que indica o quão perto da afinação correta você está.
+    - O ponteiro e o nome da nota mudam de cor (vermelho, amarelo, verde) com base na precisão.
+    - Animação de "pulso" quando a nota está perfeitamente afinada.
+- **Visualizador de Onda**: Mostra a forma de onda do áudio capturado.
+- **Interface Moderna**: Design escuro, legível e responsivo para uso em desktops e dispositivos móveis.
+- **Suavização de Movimento**: O ponteiro se move suavemente usando interpolação linear (LERP) para evitar trepidações.
 
-## 🧭 Funcionalidades
-*
+## 🧱 Tecnologias Utilizadas
 
-```md
-![TunerWeb Screenshot](C:\Users\kaell\Music\turner.png)
-🧭 Funcionalidades
+- **Vite**: Build tool rápida para desenvolvimento web moderno.
+- **React 18**: Biblioteca para construção de interfaces de usuário.
+- **TypeScript**: Superset de JavaScript que adiciona tipagem estática.
+- **CSS Modules**: Para estilos componentizados e isolados.
+- **Web Audio API**: Para captura e análise de áudio de baixa latência no navegador.
+- **requestAnimationFrame**: Para animações eficientes e suaves.
 
-🎤 Captura áudio do microfone em tempo real
+## 📂 Estrutura do Projeto
 
-🔎 Detecção de frequência usando algoritmo YIN (preciso e rápido)
+O código é organizado de forma modular para facilitar a manutenção e escalabilidade.
 
-🎼 Conversão de frequência → nota musical + oitava
-
-📉 Cálculo de cents (desvio de afinação) com alta precisão
-
-🧭 Ponteiro analógico com rotação suave (interpolação linear)
-
-🌈 Interface com feedback visual:
-
-Verde: afinado
-
-Amarelo: próximo
-
-Vermelho: fora de afinação
-
-📊 Visualizador de forma de onda / frequência
-
-📱 Design responsivo
-
-⚡ Desenvolvimento rápido com Vite
-
-🧩 Código limpo, modular e de fácil manutenção
-
-🛠️ Tecnologias Utilizadas
-
-React 18 (TypeScript)
-
-Vite 4
-
-CSS Modules
-
-Web Audio API
-
-requestAnimationFrame
-
-Algoritmo YIN (pitch detection)
-
-📁 Estrutura do Projeto
+```
 src/
+├── assets/
 ├── components/
-│   ├── Tuner/
-│   │   ├── Tuner.tsx
-│   │   └── Tuner.module.css
+│   ├── App/
+│   ├── ErrorBoundary/
+│   ├── Footer/
 │   ├── FrequencyVisualizer/
 │   ├── Header/
-│   └── Footer/
-│
+│   └── Tuner/
 ├── hooks/
 │   └── useMicrophone.ts
-│
-├── utils/
-│   ├── pitchDetection.ts
-│   └── musicUtils.ts
-│
-├── types/
 ├── styles/
+│   └── index.css
+├── utils/
+│   ├── musicUtils.ts
+│   └── pitchDetection.ts
 ├── main.tsx
-└── pages/
+└── vite-env.d.ts
+```
 
-⚙️ Instalação e Execução Local
-1. Clone o repositório
-git clone https://github.com/SEU_USUARIO/TunerWeb.git
-cd TunerWeb
+## 🛠️ Instalação e Execução
 
-2. Instale as dependências
-npm install
+Para executar este projeto localmente, siga os passos abaixo.
 
-3. Inicie o ambiente de desenvolvimento
-npm run dev
+### Pré-requisitos
 
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
 
-Aplicação disponível em:
-📌 http://localhost:5173
+### Passos
 
-🧠 Funcionamento do Afinador
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/seu-usuario/tuner-web.git
+    cd tuner-web
+    ```
 
-O TunerWeb segue um fluxo contínuo:
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-1. Captura de áudio
+3.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+    O aplicativo estará disponível em `http://localhost:5173` (ou outra porta, se a 5173 estiver em uso).
 
-Utiliza getUserMedia para obter o microfone, criando:
+4.  **Para gerar uma build de produção:**
+    ```bash
+    npm run build
+    ```
+    Os arquivos otimizados serão gerados no diretório `dist/`.
 
-AudioContext
+## 📄 Licença
 
-AnalyserNode
+Este projeto está licenciado sob a **Licença MIT**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-Buffer de amostras (Float32Array)
-
-2. Leitura da forma de onda
-
-O AnalyserNode fornece dados do domínio do tempo:
-
-getFloatTimeDomainData()
-
-3. Detecção de frequência (algoritmo YIN)
-
-O YIN calcula o período da onda através de auto-correlação cumulativa.
-Depois converte:
-
-frequência = sampleRate / atraso
-
-4. Conversão para nota musical
-
-Usa a relação logarítmica:
-
-semitones = 12 * log2(freq / 440)
-
-
-Extrai:
-
-Nome da nota
-
-Oitava
-
-Cents (desvio da afinação)
-
-5. Rotação da agulha
-
-Cents → Ângulo:
-
--50 cents → -45°
-  0 cents →   0°
-+50 cents → +45°
-
-6. Suavização do movimento
-
-A agulha usa interpolação linear para evitar jitter:
-
-lerp(atual, alvo, 0.10)
-
-7. Atualização visual contínua
-
-Executado via:
-
-requestAnimationFrame
-
-🎨 Escalas de cor
-Condição	Cents	Cor
-Afinado	`	cents
-Próximo	`5 <	cents
-Fora	> 25	🔴 Vermelho
-📦 Build para Produção
-npm run build
-
-
-Servir o build:
-
-npm run preview
-
-🧪 Testes Recomendados
-
-Afinar guitarra, baixo, voz ou teclado
-
-Testar notas graves e agudas
-
-Avaliar estabilidade em ambiente ruidoso
-
-Verificar comportamento em telemóveis
-
-📜 Licença
-
-Licença MIT — uso livre para qualquer finalidade.
-
-👨‍💻 Autor
-
-Desenvolvido por YanMalaquias 
-(adicione links para GitHub, LinkedIn ou portfólio)
-
-⭐ Contribuições
-
-Pull requests, issues e melhorias são sempre bem-vindas!
+---
+*Este `README.md` foi gerado como parte de um projeto de desenvolvimento de software.*

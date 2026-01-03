@@ -1,110 +1,99 @@
 # AI Copilot Instructions for Music Tuner Workspace
 
 ## Project Overview
-This workspace contains three React + TypeScript + Vite applications focused on audio tuning and visualization:
-- **web-tuner-app**: Fully featured tuner with frequency visualization
-- **my-nextjs-app**: Modular tuner components (under development)
-- **my-react-vite-app**: Generic Vite React template
+This workspace contains a React + TypeScript + Vite application focused on audio tuning and visualization:
+- **web-tuner-app**: A fully-featured musical tuner with a real-time frequency and waveform visualizer.
 
 ## Architecture
 
 ### Core Audio Processing Pipeline
-The tuner applications follow a consistent audio capture → analysis → UI feedback pattern:
+The tuner application follows a consistent audio capture → analysis → UI feedback pattern:
 
-1. **Microphone Access** (`useMicrophone.ts`, `useTuner.ts`)
-   - Acquire MediaStream with audio constraints (echo cancellation, noise suppression enabled in my-nextjs-app)
-   - Create WebAudio API context with AnalyserNode
-   - FFT size: 4096 (my-nextjs-app for low-frequency resolution) or 2048 (web-tuner-app)
-   - Do NOT connect source to audioContext.destination (no feedback)
+1.  **Microphone Access** (`hooks/useMicrophone.ts`)
+    -   Acquires a `MediaStream` from the user's microphone.
+    -   Creates a Web Audio API context with an `AnalyserNode`.
+    -   FFT size: 4096 for high frequency resolution.
+    -   Smoothing: 0.2 `smoothingTimeConstant`.
+    -   Does NOT connect the source to `audioContext.destination` to prevent audio feedback.
 
-2. **Pitch Detection** (`pitchDetection.ts`)
-   - **Primary algorithm**: YIN (refined implementation with CMNDF threshold)
-   - **Fallback**: Autocorrelation with parabolic interpolation
-   - **Range**: 50-1200 Hz (instrument/voice focus)
-   - **Refinement**: Parabolic interpolation for ±1 semitone accuracy
-   - Input: Float32Array from analyser.getFloatTimeDomainData()
+2.  **Pitch Detection** (`utils/pitchDetection.ts`)
+    -   **Algorithm**: Implements the YIN algorithm for accurate fundamental frequency detection.
+    -   **Details**: Uses Cumulative Mean Normalized Difference Function (CMNDF) with a threshold of `0.12`.
+    -   **Refinement**: Includes parabolic interpolation for sub-harmonic accuracy.
+    -   **Range**: Optimized for 50 Hz to 1200 Hz, covering most instruments and voice.
+    -   **Input**: `Float32Array` from `analyser.getFloatTimeDomainData()`.
 
-3. **Frequency-to-Note Mapping** (`musicUtils.ts`)
-   - Reference: A4 = 440 Hz
-   - Output: `NoteResult { note, octave, cents }`
-   - Cents: ±50 relative to nearest semitone (musical tuning standard)
+3.  **Frequency-to-Note Mapping** (`utils/musicUtils.ts`)
+    -   **Reference Pitch**: A4 = 440 Hz.
+    -   **Output**: An object containing `{ note, octave, cents, frequency }`.
+    -   **Cents**: Calculated as the deviation from the nearest perfect semitone (from -50 to +50).
 
-4. **Visualization** (`FrequencyVisualizer.tsx`)
-   - Canvas-based bar chart from byte frequency data
-   - Updates via requestAnimationFrame in animation loops
-   - Dynamic color gradient based on magnitude
+4.  **Visualization**
+    -   **Tuner Gauge** (`components/Tuner/Tuner.tsx`): An SVG-based semicircular gauge with a needle that rotates to show tuning accuracy. The needle's rotation is smoothed using Linear Interpolation (LERP).
+    -   **Waveform Display** (`components/FrequencyVisualizer/FrequencyVisualizer.tsx`): A Canvas-based component that draws a line graph of the raw audio waveform from the time-domain data (`getFloatTimeDomainData`).
 
 ## Key Patterns & Conventions
 
 ### Hook-Based Architecture
-- **useMicrophone** (my-nextjs-app): Full-featured, returns analyser node + data arrays
-  - Reuses AudioContext if already created
-  - Data refs (floatDataRef, byteDataRef) prevent allocation thrashing in animation loops
-  - Error handling: NotAllowedError (permission denied), NotFoundError (no device)
-- **useTuner** (web-tuner-app): Simpler version, uses requestAnimationFrame internally
-  - Cleanup in useEffect return to stop tracks and close context
+-   **`useMicrophone.ts`**: A custom hook that encapsulates all Web Audio API logic.
+    -   Manages microphone permission state (`prompt`, `granted`, `denied`).
+    -   Provides the `analyserNode`, `audioBuffer`, and `start/stop` controls to the application.
+    -   Handles errors gracefully (e.g., permission denied).
+    -   Ensures proper cleanup of the `AudioContext` and `MediaStream` when stopped.
 
 ### Data Flow
 ```
 MediaStream → MediaStreamAudioSourceNode → AnalyserNode
                                             ↓
-                                       FFT Analysis
+                                    getFloatTimeDomainData()
                                             ↓
-                                    getFloatFrequencyData / getByteFrequencyData
-                                    getFloatTimeDomainData (for pitch detection)
+                              getPitch() → getNoteFromFrequency()
                                             ↓
-                              detectPitch → getNoteFromFrequency
-                                            ↓
-                                          UI Components
+                                       UI Components (Tuner, FrequencyVisualizer)
 ```
 
 ### TypeScript Practices
-- Strict null checking: Return `null` for invalid audio data (silence, no samples)
-- Type exports in `types/index.ts` for cross-component sharing (e.g., NoteResult)
-- Interface pattern for hook returns (see UseMicrophoneReturn in useMicrophone.ts)
+-   Strict typing is used throughout the application.
+-   Interfaces are defined for complex objects (e.g., `NoteData`, `UseMicrophoneResult`).
+-   Avoids the use of `any`.
 
 ### Performance Considerations
-- FFT size trade-off: Larger (4096) = better frequency resolution, higher latency
-- Smoothing constant: 0.2-0.8 range; lower = faster response but noisier
-- Reuse typed arrays (Float32Array, Uint8Array) in refs to avoid GC pressure
-- Decimation in detectPitch: Downsamples to ~2048 samples target for complexity bounds
+-   **Animation**: `requestAnimationFrame` is used for all UI updates (needle rotation and waveform drawing) to ensure smooth, efficient rendering.
+-   **Smoothing**: Linear Interpolation (LERP) is used to smooth the movement of the tuner's needle, providing a more stable and professional feel.
+-   **FFT Size**: A larger FFT size (4096) is chosen for better frequency resolution, which is critical for accurate low-frequency note detection.
 
 ## Development Workflow
 
 ### Setup
 ```bash
-# web-tuner-app
+# Navigate to the application directory
 cd web-tuner-app
-npm install
-npm run dev          # Port 3000, auto-opens browser
 
-# my-nextjs-app/my-react-vite-app
-cd my-nextjs-app/my-react-vite-app
+# Install dependencies
 npm install
+
+# Start the development server
 npm run dev
 ```
 
 ### Build
 ```bash
-npm run build        # Creates optimized dist/ directory
-npm run serve        # Preview production build locally
+# Creates an optimized production build in the dist/ directory
+npm run build
+
+# Serves the production build locally for preview
+npm run serve
 ```
 
 ### Common Tasks
-- **Add new frequency range**: Modify minFrequency/maxFrequency in `detectPitch()` options
-- **Tweak pitch detection**: Adjust YIN threshold (0.1-0.15 range) or CMNDF threshold in pitchDetection.ts
-- **Change canvas visualization**: Edit FrequencyVisualizer.tsx draw logic or Tuner.module.css styling
-- **Add new audio constraint**: Pass to getUserMedia options in useMicrophone startListening()
+-   **Adjust Pitch Detection**: Modify the `threshold` in `getPitch()` (`utils/pitchDetection.ts`).
+-   **Change Tuning Reference**: Update `A4_FREQUENCY` in `utils/musicUtils.ts`.
+-   **Tweak Needle Smoothing**: Adjust the LERP factor (`0.1`) in the `App.tsx` animation loop.
 
 ## Critical Dependencies & Browser APIs
-- **Web Audio API**: AudioContext, AnalyserNode, MediaStreamAudioSourceNode
-- **MediaDevices**: getUserMedia with audio constraints
-- **Canvas 2D**: Frequency visualization
-- **React 18**: Hooks, refs, functional components
-- **Vite 4+**: ESM bundling, dev server with open plugin
-- **TypeScript 4.0+**: Strict mode
-
-## Testing & Validation
-- Manual testing: Run dev server, grant microphone permission, play tones
-- Expected behavior: Detect frequencies within 50-1200 Hz range with ±1 semitone accuracy
-- Audio constraints in my-nextjs-app (echoCancellation: true, autoGainControl: false) improve tuning accuracy for live instruments
+-   **Web Audio API**: `AudioContext`, `AnalyserNode`, `MediaStreamAudioSourceNode`
+-   **MediaDevices**: `navigator.mediaDevices.getUserMedia`
+-   **Canvas 2D API**: Used for the `FrequencyVisualizer`.
+-   **React 18**: Hooks (`useState`, `useEffect`, `useRef`, `useCallback`), functional components.
+-   **Vite**: Next-generation frontend tooling for bundling and development.
+-   **TypeScript**: For static typing and improved code quality.
