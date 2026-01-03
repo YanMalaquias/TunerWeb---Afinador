@@ -1,79 +1,94 @@
-# Web Tuner Application
+# TunerWeb - Afinador Musical para a Web
 
-This is a web tuner application built with Vite, React, and TypeScript. The application allows users to visualize audio frequencies and provides tuning functionalities.
+TunerWeb é um afinador musical digital, de alta precisão, construído com tecnologias web modernas. Ele utiliza a Web Audio API para capturar áudio do microfone em tempo real e um algoritmo de detecção de pitch (YIN) para identificar a frequência fundamental da nota tocada. A interface é limpa, responsiva e fornece feedback visual claro para ajudar músicos a afinar seus instrumentos com facilidade e precisão.
 
-## Project Structure
+![Prévia do Afinador](https://i.imgur.com/example.png) <!-- Placeholder para imagem -->
+
+## 🎯 Funcionalidades
+
+- **Detecção de Frequência em Tempo Real**: Captura e processa o áudio do microfone.
+- **Alta Precisão**: Utiliza o algoritmo YIN com interpolação parabólica para detecção de pitch sub-harmônico.
+- **Conversão para Nota Musical**: Converte a frequência detectada em nota (A, B, C#) e oitava.
+- **Medidor de Cents**: Exibe o desvio da afinação em cents (de -50 a +50) para um ajuste fino.
+- **Feedback Visual Intuitivo**:
+    - Um medidor analógico (gauge) semicircular com um ponteiro que indica o quão perto da afinação correta você está.
+    - O ponteiro e o nome da nota mudam de cor (vermelho, amarelo, verde) com base na precisão.
+    - Animação de "pulso" quando a nota está perfeitamente afinada.
+- **Visualizador de Onda**: Mostra a forma de onda do áudio capturado.
+- **Interface Moderna**: Design escuro, legível e responsivo para uso em desktops e dispositivos móveis.
+- **Suavização de Movimento**: O ponteiro se move suavemente usando interpolação linear (LERP) para evitar trepidações.
+
+## 🧱 Tecnologias Utilizadas
+
+- **Vite**: Build tool rápida para desenvolvimento web moderno.
+- **React 18**: Biblioteca para construção de interfaces de usuário.
+- **TypeScript**: Superset de JavaScript que adiciona tipagem estática.
+- **CSS Modules**: Para estilos componentizados e isolados.
+- **Web Audio API**: Para captura e análise de áudio de baixa latência no navegador.
+- **requestAnimationFrame**: Para animações eficientes e suaves.
+
+## 📂 Estrutura do Projeto
+
+O código é organizado de forma modular para facilitar a manutenção e escalabilidade.
 
 ```
-web-tuner-app
-├── index.html          # Main HTML file
-├── package.json        # Project metadata and dependencies
-├── README.md           # Project documentation
-├── tsconfig.json       # TypeScript configuration
-├── vite.config.ts      # Vite configuration
-├── public
-│   └── manifest.json   # PWA configuration
-├── src
-│   ├── main.tsx        # Entry point for the React application
-│   ├── App.tsx         # Main application component
-│   ├── pages
-│   │   └── index.tsx   # Landing page or routing
-│   ├── components
-│   │   ├── Header      # Header component
-│   │   ├── Tuner       # Tuner component
-│   │   ├── FrequencyVisualizer # Frequency visualizer component
-│   │   └── Footer      # Footer component
-│   ├── styles
-│   │   └── globals.css  # Global styles
-│   ├── hooks
-│   │   └── useTuner.ts  # Custom hook for tuner functionality
-│   ├── utils
-│   │   └── audio.ts      # Audio processing utilities
-│   └── types
-│       └── index.ts      # Type definitions
-└── .gitignore           # Files to ignore in version control
+src/
+├── assets/
+├── components/
+│   ├── App/
+│   ├── ErrorBoundary/
+│   ├── Footer/
+│   ├── FrequencyVisualizer/
+│   ├── Header/
+│   └── Tuner/
+├── hooks/
+│   └── useMicrophone.ts
+├── styles/
+│   └── index.css
+├── utils/
+│   ├── musicUtils.ts
+│   └── pitchDetection.ts
+├── main.tsx
+└── vite-env.d.ts
 ```
 
-## Installation
+## 🛠️ Instalação e Execução
 
-To get started with the project, clone the repository and install the dependencies:
+Para executar este projeto localmente, siga os passos abaixo.
 
-```bash
-git clone <repository-url>
-cd web-tuner-app
-npm install
-```
+### Pré-requisitos
 
-## Development
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
 
-To run the application in development mode, use the following command:
+### Passos
 
-```bash
-npm run dev
-```
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/seu-usuario/tuner-web.git
+    cd tuner-web
+    ```
 
-This will start the Vite development server and open the application in your default browser.
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-## Building for Production
+3.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+    O aplicativo estará disponível em `http://localhost:5173` (ou outra porta, se a 5173 estiver em uso).
 
-To build the application for production, run:
+4.  **Para gerar uma build de produção:**
+    ```bash
+    npm run build
+    ```
+    Os arquivos otimizados serão gerados no diretório `dist/`.
 
-```bash
-npm run build
-```
+## 📄 Licença
 
-This will create an optimized build of the application in the `dist` directory.
+Este projeto está licenciado sob a **Licença MIT**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## Features
-
-- **Tuner Component**: Displays the current note, deviation, and detected frequency.
-- **Frequency Visualizer**: Visualizes audio waveforms in real-time.
-- **Responsive Design**: The application is designed to work on various screen sizes.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
+---
+*Este `README.md` foi gerado como parte de um projeto de desenvolvimento de software.*

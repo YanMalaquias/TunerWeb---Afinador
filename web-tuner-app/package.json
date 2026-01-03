@@ -1,32 +1,26 @@
 {
-  "name": "web-tuner-app",
+  "name": "tunerweb",
   "version": "1.0.0",
-  "description": "A web tuner application built with Vite, React, and TypeScript.",
-  "type": "module",
-  "main": "index.html",
+  "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "serve": "vite preview"
   },
   "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.27",
-    "@types/react-dom": "^18.3.7",
-    "@vitejs/plugin-react": "^5.1.2",
-    "typescript": "^5.0.0",
-    "vite": "^5.0.0"
-  },
-  "keywords": [
-    "tuner",
-    "web",
-    "react",
-    "vite",
-    "typescript"
-  ],
-  "author": "Your Name",
-  "license": "MIT"
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
 }

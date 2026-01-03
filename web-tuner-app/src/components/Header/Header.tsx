@@ -1,11 +1,13 @@
 import React from 'react';
+import styles from './Header.module.css';
 
-const Header = () => {
-    return (
-        <header style={{ padding: '1rem', textAlign: 'center', borderBottom: '1px solid #3e4451' }}>
-            <h1>Afinador Online</h1>
-        </header>
-    );
+const Header: React.FC = () => {
+  return (
+    <header className={styles.header}>
+      <h1 className={styles.title}>TunerWeb</h1>
+      <p className={styles.subtitle}>Um Afinador Musical Preciso para a Web</p>
+    </header>
+  );
 };
 
 export default Header;

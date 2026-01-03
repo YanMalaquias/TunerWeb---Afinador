@@ -1,42 +1,107 @@
-.tuner {
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap');
+
+.tunerWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.note {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.deviation {
-  font-size: 1.5rem;
-  color: #ff5722;
-}
-
-.frequency {
-  font-size: 1.2rem;
-  color: #555;
-}
-
-.button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
+  gap: 1rem;
+  font-family: 'Roboto Mono', monospace;
   color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-.button:hover {
-  background-color: #0056b3;
+.gauge {
+  position: relative;
+  width: 100%;
+}
+
+.gaugeSvg {
+  width: 100%;
+  height: auto;
+}
+
+.arcs path {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.arcRed { stroke: #d94848; }
+.arcYellow { stroke: #d9c448; }
+.arcGreen { stroke: #48d969; }
+
+/* The pivot point is the center of the SVG viewBox (100, 100) */
+.needle {
+  transform-origin: 100px 100px;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.noteDisplay {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.noteName {
+  line-height: 1;
+}
+
+.octave {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-left: 0.25rem;
+  line-height: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1rem;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* Color feedback classes */
+.outOfTune { color: #d94848; }
+.close { color: #d9c448; }
+.inTune { color: #48d969; }
+
+/* Pulse animation for the needle's pivot point */
+.pulse {
+  animation: pulse-animation 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulse-animation {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(72, 217, 105, 0.4);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px 20px rgba(72, 217, 105, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(72, 217, 105, 0);
+  }
+}
+
+/* Make it responsive */
+@media (max-width: 480px) {
+  .noteDisplay {
+    font-size: 2.5rem;
+  }
+  .octave {
+    font-size: 1.2rem;
+  }
 }
